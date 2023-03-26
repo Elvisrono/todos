@@ -10,48 +10,70 @@ function Login({ setLoggedIn }) {
 
     const [formState, setFormState] = useState(initFormState);
 
+
     const navigate = useNavigate()
+
+   
+
+
 
     const formChange = (e) => {
         const {name, value } = e.target;
         setFormState((prevState) => ({...prevState, [name]: value}))
     }
 
-    const handleLogin = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
-        setLoggedIn(formState.username);
-        setFormState(initFormState);
-        localStorage.setItem('user', formState.username);
-        navigate('/home');
+        await fetch ('users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formState)
+        })
+        .then ((resp) => resp.json())
+        .then ((user) => {
+            console.log(user)
+            if(user.error) {
+                alert(user.error)
+            } else {
+                setLoggedIn(user)
+                setFormState(initFormState)
+                localStorage.setItem('user', user)
+                console.log(user)
+                navigate('/home')
+            }
+        })
     }
 
     return (
-        <div className='login-box'>
+        <div class='login-box'>
             <h2><b>Login</b></h2>
             <br></br>
             <h3><b>Welcome to Task Manager</b></h3>
             <br></br>
-            <h4><i>Login to create your tasks</i></h4>
+            <h4> <i>Login to create your tasks </i></h4>
             <br></br>
-            <form className='formWrapper' onSubmit={handleLogin} autoComplete="off">
-                <div className="user-box">
-                    <input className='input' type='text' name='username' placeholder='Username' value={formState.username} onChange={formChange} required />
+            <form className = 'formWrapper' onSubmit = {handleSubmit} autoComplete="off">
+                <div class = "user-box">
+                <input className = 'input' type = 'text' name = 'username' placeholder = 'Username' value = {formState.username} onChange = {formChange} required />
                 </div>
                 <br></br>
-                <div className="user-box">
-                    <input className='input' type='password' name='password' placeholder='Password' value={formState.password} onChange={formChange} required />
+                <div class="user-box">
+                <input className = 'input' type = 'password' name = 'password' placeholder = 'Password' value = {formState.password} onChange = {formChange} required />
                 </div>
                 <br></br>
-                <div className="button-form">
-                    <button id='formBtn' type='submit'>LOGIN</button>
-                    <div className='register'>
-                        <p className='signup'><h5>Don't have an account?</h5><br />
-                            <a id='signupLink' href='/users/new' >Register</a></p>
-                    </div>
-                </div>
+                <div class="button-form">
+                <button id = 'formBtn' type = 'submit'>LOGIN</button>
+                <div class='register'>
+                  <p className = 'signup'><h5>Don't have an account?</h5><br />
+                  <a id = 'signupLink' href = '/users/new' >Register</a></p>
+                 </div>
+                 </div>
             </form>
+            
         </div>
     )
 }
 
-export default Login;
+export default Login

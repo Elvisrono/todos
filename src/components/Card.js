@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import EditTask from '../modals/EditTask';
 import '../../src/App.css';
 
-const Card = ({ taskObj, handleNewPost, deleteTask, handleView }) => {
+const Card = ({ taskObj, loggedIn, handleNewPost, deleteTask, handleView }) => {
   const [modal, setModal] = useState(false);
 
   const colors = [
@@ -33,15 +33,25 @@ const Card = ({ taskObj, handleNewPost, deleteTask, handleView }) => {
   };
 
   const handleDelete = () => {
-    console.warn('handleDelete not implemented');
-    // deleteTask(taskObj.id);
+    fetch(`http://localhost:9292/users/${loggedIn.id}/tasks/${taskObj.id}`, {
+      method: 'DELETE',
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error('Failed to delete task');
+        }
+      })
+      .then(() => deleteTask(taskObj.id))
+      .catch((error) => console.error(error));
   };
 
   return (
     <div className="card-wrapper mr-5">
       <div className="card-top" style={{ backgroundColor: colors[1 % 5].primaryColor }}></div>
       <div className="task-holder">
-        <span className="card-header" style={{ backgroundColor: colors[4 % 5].secondaryColor, borderRadius: '10px' }}>
+        <span class="card-header" style={{ backgroundColor: colors[4 % 5].secondaryColor, borderRadius: '10px' }}>
           {taskObj.category}
         </span>
         <div className="task-mt-3">{taskObj.todos}</div>
@@ -49,12 +59,12 @@ const Card = ({ taskObj, handleNewPost, deleteTask, handleView }) => {
         <p1>Status: {taskObj.completed ? 'Completed' : 'Not Completed'} </p1>
         <div style={{ position: 'absolute', right: '20px', bottom: '20px' }}>
           <i
-            className="far fa-edit mr-3"
+            class="far fa-edit mr-3"
             style={{ color: colors[19 % 5].primaryColor, cursor: 'pointer' }}
             onClick={() => setModal(true)}
           ></i>
           <i
-            className="fas fa-trash-alt"
+            class="fas fa-trash-alt"
             onClick={handleDelete}
             style={{ color: colors[20 % 5].primaryColor, cursor: 'pointer' }}
           ></i>
@@ -62,7 +72,7 @@ const Card = ({ taskObj, handleNewPost, deleteTask, handleView }) => {
         </div>
     
       </div>
-      <EditTask modal={modal} handleNewPost={handleNewPost} taskObj={taskObj} toggle={toggle} />
+      <EditTask modal={modal} loggedIn={loggedIn} handleNewPost={handleNewPost} toggle={toggle} taskObj={taskObj} />
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-
 import { useEffect } from 'react';
 import { useState } from 'react';
 
@@ -34,7 +33,17 @@ const EditTask = ({ modal, loggedIn, handleNewPost, toggle, taskObj, handleView,
       handleSave(form);
     };
   
-    const handleUpdate = () => {
+    const handleUpdate = (e) => {
+      fetch(
+        `http://localhost:9292/users/${loggedIn.id}/tasks/${taskObj.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify(form)
+        }
+      );
       handleNewPost();
       toggle();
     };
@@ -91,4 +100,4 @@ const EditTask = ({ modal, loggedIn, handleNewPost, toggle, taskObj, handleView,
     );
   };
 
-  export default EditTask;
+  export default EditTask

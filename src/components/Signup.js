@@ -25,10 +25,25 @@ function Signup({ addNewUser }) {
         setPassConfirmation((prevState) => ({...prevState, [name]: value}))
     }
 
-    const handleReset = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
-        setFormState(initFormState);
-        setPassConfirmation({passwordConfirm: ''});
+        if (formState.password !== passConfirmation.passwordConfirm) {
+            alert('Passwords do not match! Please try again.')
+        } else {
+            await fetch ("/users", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formState)
+            })
+            .then ((resp) => resp.json())
+            .then ((newUser) => {
+                addNewUser(newUser)
+                setFormState(initFormState)
+                navigate('/')
+            })
+        }
     }
 
     return (
@@ -39,7 +54,7 @@ function Signup({ addNewUser }) {
             <br></br>
             <h4> <i>Signup to create and see your tasks </i></h4>
             <br></br>
-            <form  className = 'formWrapper' onSubmit = {handleReset} autoComplete="off">
+            <form  className = 'formWrapper' onSubmit = {handleSubmit} autoComplete="off">
             <div class = "user-box">
                 <label className = 'label' htmlFor = 'username'></label>
                 <input className = 'input' id = 'username' type = 'text' name = 'username' placeholder = 'Username' value = {formState.username} onChange = {formChange} required />
