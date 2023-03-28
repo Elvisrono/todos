@@ -26,7 +26,7 @@ const CreateTask = ({ modal, toggle, loggedIn, handleNewPost }) => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    fetch(`http://localhost:9292/users/${loggedIn.id}/tasks`, {
+    fetch(`http://localhost:9292/users/${loggedIn.id}/todos`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',

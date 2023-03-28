@@ -35,7 +35,7 @@ const EditTask = ({ modal, loggedIn, handleNewPost, toggle, taskObj, handleView,
   
     const handleUpdate = (e) => {
       fetch(
-        `http://localhost:9292/users/${loggedIn.id}/tasks/${taskObj.id}`,
+        `http://localhost:3000/users/${loggedIn.id}/todos/${taskObj.id}`,
         {
           method: "PATCH",
           headers: {

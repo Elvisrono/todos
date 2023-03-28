@@ -33,7 +33,7 @@ const Card = ({ taskObj, loggedIn, handleNewPost, deleteTask, handleView }) => {
   };
 
   const handleDelete = () => {
-    fetch(`http://localhost:9292/users/${loggedIn.id}/tasks/${taskObj.id}`, {
+    fetch(`http://localhost:9292/users/${loggedIn.id}/${taskObj.id}`, {
       method: 'DELETE',
     })
       .then((res) => {

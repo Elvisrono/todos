@@ -8,7 +8,9 @@
 + [Authors Info](#author-Info)
 
 ## Introduction
-- Build a frontend application with React.
+- Build a frontend application with React supported by backend.
+- Here is yhe link to backend repository
+        https://github.com/kericho/TaskTrain
 
 # Description
 <p>Build a web Task Manager  with React and style with CSS to interract with Ruby backend. The application enables a user to create, read, update, patch, and delete new Tasks. Changes will be persisted on the server.</p>

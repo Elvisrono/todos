@@ -4,9 +4,10 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ToDoList from './components/ToDoList';
-import Signup from './components/Signup';
+import Signup from './components/Register';
 import Login from './components/Login';
 import CreateTask from './modals/CreateTask';
+import userEvent from '@testing-library/user-event';
 
 
 
@@ -15,6 +16,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState({})
   const [tasks, setTasks] = useState([])
   const [post, setPosts] = useState(true)
+  const [user, setUser] = useState(null)
 
   const addNewUser = (newUser) => setLoggedIn(newUser);
 

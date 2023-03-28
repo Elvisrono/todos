@@ -1,79 +1,44 @@
-import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+//import React, { useState } from "react";
+//import Register from "./Register";
+
 import "../components/login.css";
+import axios from 'axios'
 
-function Login({ setLoggedIn }) {
-    const initFormState = {
-        username: '',
-        password: ''
-    }
+import React, { useState } from 'react';
 
-    const [formState, setFormState] = useState(initFormState);
+function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
+  const handleLogin = (event) => {
+    event.preventDefault();
+    axios.post('/users/login', { email, password })
+      .then((response) => {
+        // Save the authentication token to localStorage
+        localStorage.setItem('authToken', response.data.token);
+        // Redirect to the todo card landing page
+        window.location.href = '/todos';
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-    const navigate = useNavigate()
-
-   
-
-
-
-    const formChange = (e) => {
-        const {name, value } = e.target;
-        setFormState((prevState) => ({...prevState, [name]: value}))
-    }
-
-    const handleSubmit = async(e) => {
-        e.preventDefault();
-        await fetch ('users/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formState)
-        })
-        .then ((resp) => resp.json())
-        .then ((user) => {
-            console.log(user)
-            if(user.error) {
-                alert(user.error)
-            } else {
-                setLoggedIn(user)
-                setFormState(initFormState)
-                localStorage.setItem('user', user)
-                console.log(user)
-                navigate('/home')
-            }
-        })
-    }
-
-    return (
-        <div class='login-box'>
-            <h2><b>Login</b></h2>
-            <br></br>
-            <h3><b>Welcome to Task Manager</b></h3>
-            <br></br>
-            <h4> <i>Login to create your tasks </i></h4>
-            <br></br>
-            <form className = 'formWrapper' onSubmit = {handleSubmit} autoComplete="off">
-                <div class = "user-box">
-                <input className = 'input' type = 'text' name = 'username' placeholder = 'Username' value = {formState.username} onChange = {formChange} required />
-                </div>
-                <br></br>
-                <div class="user-box">
-                <input className = 'input' type = 'password' name = 'password' placeholder = 'Password' value = {formState.password} onChange = {formChange} required />
-                </div>
-                <br></br>
-                <div class="button-form">
-                <button id = 'formBtn' type = 'submit'>LOGIN</button>
-                <div class='register'>
-                  <p className = 'signup'><h5>Don't have an account?</h5><br />
-                  <a id = 'signupLink' href = '/users/new' >Register</a></p>
-                 </div>
-                 </div>
-            </form>
-            
-        </div>
-    )
+  return (
+    <form onSubmit={handleLogin}>
+      <label>
+        Email:
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </label>
+      <br />
+      <label>
+        Password:
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      </label>
+      <br />
+      <button type="submit">Log in</button>
+    </form>
+  );
 }
 
-export default Login
+export default Login;

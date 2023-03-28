@@ -4,7 +4,7 @@ import CreateTask from '../modals/CreateTask';
 import { useState } from 'react';
 import Card from './Card';
 //import Search from './Search';
-import "../components/signup.css";
+import "../components/register.css";
 import "../components/todolist.css"
 
 const ToDoList =({tasks, loggedIn, deleteTask, handleNewPost}) => {
@@ -25,7 +25,7 @@ const ToDoList =({tasks, loggedIn, deleteTask, handleNewPost}) => {
 )}
 
     async function searchFunction(searchTerms){
-        fetch("http://localhost:9292/users/${loggedIn.id}/tasks")
+        fetch("http://localhost:3000/users/${loggedIn.id}")
           .then(res => res.json())
           .then(data => {
             //let newData = [];
